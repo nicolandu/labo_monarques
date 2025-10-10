@@ -1,0 +1,42 @@
+%filename Rapport-asclepiade
+% ltex: language=fr
+\documentclass{bio}
+\author{Harout CHOULGIAN, Akira LAFOREST et Nicolas LANDUCCI}
+\title{TODO\\TODO}
+\teacher{Louis-Philippe Précourt}
+\course{BIO-N02}
+\group{2}
+\department{Biologie}
+\date{4 novembre 2025}
+
+\addbibresource{monarques.bib}
+
+\newcommand{\resize}[1]{\resizebox{\textwidth}{!}{#1}}
+
+\begin{document}
+\maketitle
+\tocpage
+
+
+\section{Introduction}
+    Bonjour~\parencite{gbif.orgGBIFOccurrenceDownload2025}
+    \begin{figure}[h!]
+        \centering
+        \caption{Occurrences d'\textit{Asclepias syriaca} et de \textit{Danaus plexippus} à Montréal depuis 2020}
+        \resize{%
+            \input{figures/montreal_map.tex}%
+        }
+    \end{figure}
+    \begin{figure}[h!]
+        \centering
+        \caption{Corrélation}
+        \resize{%
+            \input{figures/correlation.tex}%
+        }
+    \end{figure}
+\section{Contexte théorique}
+
+\printbibliography
+\end{document}
+
+% Biais possible: les gens qui étudient les monarques vont-ils où les asclépiades sont cartographiées?
