@@ -1,8 +1,8 @@
-%filename Rapport-asclepiade
+%filename Graphiques-asclepiade
 % ltex: language=fr
 \documentclass{bio}
 \author{Harout CHOULGIAN, Akira LAFOREST et Nicolas LANDUCCI}
-\title{TODO\\TODO}
+\title{Analyse de base de données\\Graphiques préliminaires à titre indicatif}
 \teacher{Louis-Philippe Précourt}
 \course{BIO-N02}
 \group{2}
@@ -15,35 +15,33 @@
 
 \begin{document}
 \maketitle
-\tocpage
+%\tocpage
 
 
-\section{Introduction}
-    Bonjour~\parencite{gbif.orgGBIFOccurrenceDownload2025}
-
-
+%\section{Introduction}
+    CSR: Complètement spatialement aléatoire \textit{Completely spatially random}\nocite{gbif.orgGBIFOccurrenceDownload2025}
     \begin{figure}[H]
         \centering
-        \caption{Occurrences d'\textit{Asclepias syriaca} et de \textit{Danaus plexippus} à Montréal depuis 2020}
+        \caption{Occurrences de diverses espèces végétales et de lépidoptères à Montréal depuis 2020}
         \resize{%
             \input{figures/montreal_map.tex}%
         }
     \end{figure}
     \begin{figure}[H]
         \centering
-        \caption{Corrélation}
+        \caption{Corrélation entre les espèces}
         \resize{%
             \input{figures/correlation.tex}%
         }
     \end{figure}
     \begin{figure}[H]
         \centering
-        \caption{Corrélation proche}
+        \caption{Corrélation entre les espèces pour $r \le \SI{1}{\km}$}
         \resize{%
             \input{figures/correlation_close.tex}%
         }
     \end{figure}
-\section{Contexte théorique}
+%\section{Contexte théorique}
 
 \printbibliography
 \end{document}

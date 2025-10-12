@@ -8,13 +8,14 @@ options(
   )
 )
 
-library(ggplot2)
-library(scales)
-library(tikzDevice)
-library(glue)
+library(dplyr)
 library(finch)
+library(ggplot2)
+library(glue)
+library(scales)
 library(sf)
 library(spatstat)
+library(tikzDevice)
 
 year_min <- 2020
 mtl_name <- "Communauté-Urbaine-de-Montréal"
@@ -24,10 +25,16 @@ output_dir <- "./figures"
 canada_shapefile <- glue("{data_dir}/gadm41_CAN.gpkg")
 darwin <- glue("{data_dir}/0008031-251009101135966.zip")
 
-a_name <- "Asclepias syriaca"
-b_name <- "Danaus plexippus"
+a_species <- c("Asclepias syriaca", "Asclepias incarnata", "Acer saccharinum")
+b_species <- c("Danaus plexippus", "Limenitis archippus")
 
-use_tikz <- FALSE
+close_distance <- 1000 # m
+
+theo_label <- r"[CSR ($\pi r^2$)]"
+
+# Faster to set to FALSE when testing (output to PDF)
+# Set to TRUE for generating the .tex files used in the report
+use_tikz <- TRUE
 
 init <- function(name) {
   if (use_tikz) {
@@ -65,6 +72,8 @@ french_lat_label <- function(x) {
   })
 }
 
+all_species <- c(a_species, b_species)
+
 darwin <- dwca_read(darwin, read = TRUE)
 occ <- darwin$data$occurrence.txt
 
@@ -87,18 +96,25 @@ occ <- st_as_sf(
 )
 
 occ <- occ[
-  occ$verbatimScientificName %in% c(a_name, b_name),
+  occ$verbatimScientificName %in% c(a_species, b_species),
 ]
 
 occ_proj <- st_transform(occ, 32188) # NAD83
-tmp_coords <- st_coordinates(occ_proj)
 
+occ_proj <- subset(occ_proj, verbatimScientificName %in% all_species)
+
+tmp_coords <- st_coordinates(occ_proj)
 dup_locs <- duplicated(tmp_coords)
 occ_proj <- occ_proj[!dup_locs, ]
 coords <- st_coordinates(occ_proj)
 
-asclepias_proj <- subset(occ_proj, verbatimScientificName == a_name)
-danaus_proj <- subset(occ_proj, verbatimScientificName == b_name)
+# Reorder factor
+occ_proj$verbatimScientificName <-
+  factor(occ_proj$verbatimScientificName, levels = all_species)
+
+# Reorder rows so plotting respects the factor order
+occ_proj <- occ_proj |>
+  arrange(verbatimScientificName)
 
 canada <- st_read(canada_shapefile, layer = "ADM_ADM_2")
 mtl <- canada[canada$NAME_2 == mtl_name, ]
@@ -111,83 +127,128 @@ combined <- ppp(coords[, "X"], coords[, "Y"],
   marks = factor(occ_proj$verbatimScientificName)
 )
 
-k <- Kcross(combined, i = a_name, j = b_name, correction = "iso")
+results_list <- list()
+results_list_close <- list()
 
-k_df <- as.data.frame(k)
-# Convert from m^2 to km^2
-k_df$theo <- k_df$theo / 1e6
-k_df$iso <- k_df$iso / 1e6
+for (a in a_species) {
+  for (b in b_species) {
+    combined <- ppp(
+      coords[, "X"], coords[, "Y"],
+      window = mtl_win,
+      marks = factor(occ_proj$verbatimScientificName)
+    )
+
+    k <- Kcross(combined, i = a, j = b, correction = "iso")
+    k_df <- as.data.frame(k)
+    # Convert from m^2 to km^2
+    k_df$theo <- k_df$theo / 1e6
+    k_df$iso <- k_df$iso / 1e6
+    k_df$a <- a
+    k_df$b <- b
 
 
-i <- which(k_df$r >= 1000)[1]
+    i <- which(k_df$r >= close_distance)[1]
+    # Subset all rows up to that index
+    k_df_close <- k_df[1:i, ]
+
+    results_list[[paste(a, b, sep = "_")]] <- k_df
+    results_list_close[[paste(a, b, sep = "_")]] <- k_df_close
+  }
+}
+
+k_df <- bind_rows(results_list)
+k_df_close <- bind_rows(results_list_close)
+
+
+occ_proj$label <- with(occ_proj, paste(
+  r"[\textit{]", verbatimScientificName, r"[}]",
+  sep = ""
+))
+k_df$label <- with(k_df, paste(
+  r"[\textit{]", a, r"[} $\times$ \textit{]", b, r"[}]",
+  sep = ""
+))
+k_df_close$label <- with(k_df_close, paste(
+  r"[\textit{]", a, r"[} $\times$ \textit{]", b, r"[}]",
+  sep = ""
+))
+
+theo_df <- k_df |>
+  select(r, theo) |>
+  distinct()
+theo_df$label <- theo_label
+
 # Subset all rows up to that index
-k_df_close <- k_df[1:i, ]
+i <- which(theo_df$r >= close_distance)[1]
+theo_df_close <- theo_df[1:i, ]
+
+
+
+# Get unique labels from k_df (same labels as in k_df_close)
+all_labels <- unique(k_df$label)
+
+# Set colors: black for theoretical line, automatic for others
+colors <- c(
+  setNames("black", theo_label),
+  scales::hue_pal()(length(all_labels))
+)
+names(colors) <- c(theo_label, all_labels)
+
+
 
 init("montreal_map")
 ggplot() +
   geom_sf(data = mtl, fill = "lightgrey", color = "black", alpha = 0.3) +
   geom_sf(
-    data = asclepias_proj,
-    aes(color = verbatimScientificName), size = 0.5
-  ) +
-  geom_sf(data = danaus_proj, aes(color = verbatimScientificName), size = 0.5) +
-  scale_color_manual(
-    values = setNames(
-      c("red", "blue"),
-      c(a_name, b_name)
-    ),
-    labels = setNames(
-      c(bquote(italic(.(a_name))), bquote(italic(.(b_name)))),
-      c(a_name, b_name)
-    ),
-    name = "Espèce"
+    data = occ_proj,
+    aes(color = label),
+    size = 0.5,
+    alpha = 0.5
   ) +
   labs(
     x = "Longitude",
-    y = "Latitude"
+    y = "Latitude",
+    color = "Espèce"
   ) +
   scale_x_continuous(labels = french_lon_label) +
   scale_y_continuous(labels = french_lat_label) +
   coord_sf(expand = FALSE) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", legend.text = element_text(size = 8)) +
+  guides(color = guide_legend(ncol = 3, byrow = TRUE))
 end()
 
 init("correlation")
-ggplot(k_df, aes(x = r / 1000)) +
-  geom_line(aes(y = theo, color = "Théorique (CSR)"),
-    linewidth = 0.8, linetype = "dashed"
+ggplot(k_df, aes(x = r / 1000, y = iso, color = label)) +
+  geom_line() +
+  geom_line(
+    data = theo_df,
+    aes(x = r / 1000, y = theo, color = label),
+    linetype = "dashed"
   ) +
-  geom_line(aes(y = iso, color = "Observée"), linewidth = 1.2) +
-  scale_color_manual(
-    values = c(
-      "Théorique (CSR)" = "#A23B72",
-      "Observée" = "#2E86AB"
-    ),
-    name = ""
-  ) +
+  scale_color_manual(values = colors) +
   labs(
-    x = r"[Distance $r$ (\unit{\m})]",
-    y = r"[$K(r)$ (\unit{\km\squared})]"
+    x = r"[Distance $r$ (\unit{\km})]",
+    y = r"[$K(r)$ (\unit{\km\squared})]",
+    color = "Espèces"
   ) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 2, byrow = TRUE))
 end()
 
 init("correlation_close")
-ggplot(k_df_close, aes(x = r)) +
-  geom_line(aes(y = theo, color = "Théorique (CSR)"),
-    linewidth = 0.8, linetype = "dashed"
+ggplot(k_df_close, aes(x = r, y = iso, color = label)) +
+  geom_line() +
+  geom_line(
+    data = theo_df_close,
+    aes(x = r, y = theo, color = label),
+    linetype = "dashed"
   ) +
-  geom_line(aes(y = iso, color = "Observée"), linewidth = 1.2) +
-  scale_color_manual(
-    values = c(
-      "Théorique (CSR)" = "#A23B72",
-      "Observée" = "#2E86AB"
-    ),
-    name = ""
-  ) +
+  scale_color_manual(values = colors) +
   labs(
     x = r"[Distance $r$ (\unit{\m})]",
-    y = r"[$K(r)$ (\unit{\km\squared})]"
+    y = r"[$K(r)$ (\unit{\km\squared})]",
+    color = "Espèces"
   ) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 2, byrow = TRUE))
 end()
