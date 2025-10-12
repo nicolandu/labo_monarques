@@ -1,3 +1,4 @@
+% TODO: update dependencies based on bio.cls
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{bio_presentation}[Brebeuf bio presentation]
 
@@ -20,7 +21,10 @@
 
 \RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}
 
-\RequirePackage[style=apa, urldate=iso, date=iso, seconds=true, autolang=none]{biblatex}
+\RequirePackage[style=apa, urldate=iso, date=iso, seconds=true, language=french]{biblatex}
+\input{french-apa-patch.tex}
+
+
 \renewcommand*{\multicitedelim}{,} % no space in [1,2,3]
 \setlength{\bibitemsep}{\parskip} % spacing between entries
 \setlength{\bibparsep}{0pt} % spacing between paragraphs in a single entry

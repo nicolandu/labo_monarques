@@ -40,6 +40,7 @@
 
 \RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}
 
+% Patched since TeX Live is not up to date
 \RequirePackage[style=apa, sortcites, language=french]{biblatex}
 
 \renewcommand*{\multicitedelim}{,} % no space in [1,2,3]

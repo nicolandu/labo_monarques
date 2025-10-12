@@ -14,12 +14,13 @@ OUTNAME_MAGIC = r"%filename "
 OUTNAME_FMT = r"{}.pdf"
 
 
-def clean():
+def clean(silent=False):
     try:
         shutil.rmtree(TMP)
         print(f"    [INFO] Deleted '{TMP}'")
     except Exception as e:
-        print(f"    [WARN] Failed to delete '{TMP}': {e}")
+        if not silent:
+            print(f"    [WARN] Failed to delete '{TMP}': {e}")
 
 
 def compile(name):
@@ -50,11 +51,7 @@ def compile(name):
     ]
 
     for cmd in commands:
-        try:
-            subprocess.run(cmd, cwd=TMP, check=True, shell=False)
-        except subprocess.CalledProcessError:
-            print("    [ERROR] Command '", " ".join(cmd), f"' failed.", sep="")
-            sys.exit(1)
+        subprocess.run(cmd, cwd=TMP, check=True, shell=False)
 
     src = TMP / f"{name}.pdf"
     dst = OUT / outname
@@ -64,32 +61,20 @@ def compile(name):
 
 
 def main():
-    error = False
     parser = argparse.ArgumentParser(description="Compile LaTeX project.")
     parser.add_argument("file", help="LaTeX project to compile.")
-    parser.add_argument("--noclean", action="store_true", help="Do not clean up after compilation.")
-    parser.add_argument("--clean", action="store_true", help="Only clean without compiling.")
 
     args = parser.parse_args()
 
-    if args.clean and (args.file or args.noclean):
-        parser.error("--clean should be used standalone.")
-    elif args.clean:
+    clean(silent=True)
+    try:
+        compile(args.file)
+    except subprocess.CalledProcessError as e:
+        print("    [ERROR] Command '", " ".join(e.cmd), f"' failed.", sep="")
         clean()
-        print("    [INFO] Cleaned without compiling, exiting.")
-        sys.exit(0)
-    else:
-        name = args.file
+        sys.exit(1)
 
     clean()
-    compile(name)
-
-    if not args.noclean:
-        clean()
-    if error:
-        print("    [WARN] Job done with errors.")
-    else:
-        print("    [INFO] Job done, no error.")
 
 
 if __name__ == "__main__":
@@ -97,4 +82,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("    [INFO] Ctrl-C received, aborting.")
+        clean()
         sys.exit(1)

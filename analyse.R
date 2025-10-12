@@ -1,6 +1,12 @@
 #!/usr/bin/env Rscript
 
-options(tikzDefaultEngine = "luatex")
+options(
+  tikzDefaultEngine = "luatex",
+  tikzLualatexPackages = c(
+    r"[\usepackage{tikz}]",
+    r"[\RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}]" # nolint: line_length_linter.
+  )
+)
 
 library(ggplot2)
 library(scales)
@@ -16,17 +22,17 @@ data_dir <- "./data"
 output_dir <- "./figures"
 
 canada_shapefile <- glue("{data_dir}/gadm41_CAN.gpkg")
-darwin <- glue("{data_dir}/0002115-251009101135966.zip")
+darwin <- glue("{data_dir}/0008031-251009101135966.zip")
 
-asclepias_name <- "Asclepias syriaca"
-danaus_name <- "Danaus plexippus"
+a_name <- "Asclepias syriaca"
+b_name <- "Danaus plexippus"
 
-use_tikz <- TRUE
+use_tikz <- FALSE
 
 init <- function(name) {
   if (use_tikz) {
     tikz(glue("{output_dir}/{name}.tex"),
-      width = 7, height = 7, standAlone = FALSE
+      width = 7, height = 7, standAlone = FALSE,
     )
   }
 }
@@ -37,24 +43,24 @@ end <- function() {
   }
 }
 
-french_long_label <- function(x) {
+french_lon_label <- function(x) {
   sapply(x, function(lon) {
     lon_str <- gsub("\\.", ",", format(round(abs(lon), 1), nsmall = 1))
     if (lon < 0) {
-      paste0(lon_str, "°O")
+      paste0(lon_str, r"[\unit{\degree}~O]")
     } else {
-      paste0(lon_str, "°E")
+      paste0(lon_str, r"[\unit{\degree}~E]")
     }
   })
 }
 
 french_lat_label <- function(x) {
   sapply(x, function(lat) {
-    lat_str <- gsub("\\.", ",", format(round(abs(lat), 2), nsmall = 2))
+    lat_str <- gsub(r"[\\.]", ",", format(round(abs(lat), 2), nsmall = 2))
     if (lat < 0) {
-      paste0(lat_str, "°S")
+      paste0(lat_str, r"[\unit{\degree}~S]")
     } else {
-      paste0(lat_str, "°N")
+      paste0(lat_str, r"[\unit{\degree}~N]")
     }
   })
 }
@@ -81,7 +87,7 @@ occ <- st_as_sf(
 )
 
 occ <- occ[
-  occ$verbatimScientificName %in% c(asclepias_name, danaus_name),
+  occ$verbatimScientificName %in% c(a_name, b_name),
 ]
 
 occ_proj <- st_transform(occ, 32188) # NAD83
@@ -91,8 +97,8 @@ dup_locs <- duplicated(tmp_coords)
 occ_proj <- occ_proj[!dup_locs, ]
 coords <- st_coordinates(occ_proj)
 
-asclepias_proj <- subset(occ_proj, verbatimScientificName == asclepias_name)
-danaus_proj <- subset(occ_proj, verbatimScientificName == danaus_name)
+asclepias_proj <- subset(occ_proj, verbatimScientificName == a_name)
+danaus_proj <- subset(occ_proj, verbatimScientificName == b_name)
 
 canada <- st_read(canada_shapefile, layer = "ADM_ADM_2")
 mtl <- canada[canada$NAME_2 == mtl_name, ]
@@ -105,7 +111,7 @@ combined <- ppp(coords[, "X"], coords[, "Y"],
   marks = factor(occ_proj$verbatimScientificName)
 )
 
-k <- Kcross(combined, i = asclepias_name, j = danaus_name, correction = "iso")
+k <- Kcross(combined, i = a_name, j = b_name, correction = "iso")
 
 k_df <- as.data.frame(k)
 # Convert from m^2 to km^2
@@ -128,11 +134,11 @@ ggplot() +
   scale_color_manual(
     values = setNames(
       c("red", "blue"),
-      c(asclepias_name, danaus_name)
+      c(a_name, b_name)
     ),
     labels = setNames(
-      c(bquote(italic(.(asclepias_name))), bquote(italic(.(danaus_name)))),
-      c(asclepias_name, danaus_name)
+      c(bquote(italic(.(a_name))), bquote(italic(.(b_name)))),
+      c(a_name, b_name)
     ),
     name = "Espèce"
   ) +
@@ -140,13 +146,13 @@ ggplot() +
     x = "Longitude",
     y = "Latitude"
   ) +
-  scale_x_continuous(labels = french_long_label) +
+  scale_x_continuous(labels = french_lon_label) +
   scale_y_continuous(labels = french_lat_label) +
   coord_sf(expand = FALSE) +
   theme(legend.position = "bottom")
 end()
 
-init("correlation_map")
+init("correlation")
 ggplot(k_df, aes(x = r / 1000)) +
   geom_line(aes(y = theo, color = "Théorique (CSR)"),
     linewidth = 0.8, linetype = "dashed"
@@ -160,13 +166,13 @@ ggplot(k_df, aes(x = r / 1000)) +
     name = ""
   ) +
   labs(
-    x = "Distance r (km)",
-    y = "K(r) (km^2)"
+    x = r"[Distance $r$ (\unit{\m})]",
+    y = r"[$K(r)$ (\unit{\km\squared})]"
   ) +
   theme(legend.position = "bottom")
 end()
 
-init("correlation_map_close")
+init("correlation_close")
 ggplot(k_df_close, aes(x = r)) +
   geom_line(aes(y = theo, color = "Théorique (CSR)"),
     linewidth = 0.8, linetype = "dashed"
@@ -180,8 +186,8 @@ ggplot(k_df_close, aes(x = r)) +
     name = ""
   ) +
   labs(
-    x = "Distance r (m)",
-    y = "K(r) (km2)"
+    x = r"[Distance $r$ (\unit{\m})]",
+    y = r"[$K(r)$ (\unit{\km\squared})]"
   ) +
   theme(legend.position = "bottom")
 end()
