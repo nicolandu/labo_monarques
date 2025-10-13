@@ -25,10 +25,21 @@ output_dir <- "./figures"
 canada_shapefile <- glue("{data_dir}/gadm41_CAN.gpkg")
 darwin <- glue("{data_dir}/0008031-251009101135966.zip")
 
-a_species <- c("Asclepias syriaca", "Asclepias incarnata", "Acer saccharinum")
-b_species <- c("Danaus plexippus", "Limenitis archippus")
+a_species <- c(
+  "Asclepias syriaca",
+  "Asclepias incarnata",
+  "Arctium lappa",
+  "Solidago canadensis"
+)
+b_species <- c(
+  "Danaus plexippus",
+  "Limenitis archippus"
+)
 
 close_distance <- 1000 # m
+norm_min_distance <- 50 # m
+
+brewer_palette <- "Dark2"
 
 theo_label <- r"[CSR ($\pi r^2$)]"
 
@@ -182,19 +193,57 @@ theo_df$label <- theo_label
 i <- which(theo_df$r >= close_distance)[1]
 theo_df_close <- theo_df[1:i, ]
 
+# Avoid name clashes betweeen k_df and theo_df
+# Drop theo_ref at the end
+k_df_norm <- k_df |>
+  left_join(
+    theo_df |>
+      select(r, theo) |>
+      rename(theo_ref = theo),
+    by = "r"
+  ) |>
+  mutate(norm = iso / theo_ref) |>
+  select(-theo_ref)
+r_prev <- max(
+  k_df_norm$r[k_df_norm$r < norm_min_distance],
+  na.rm = TRUE
+)
+k_df_norm <- k_df_norm |>
+  filter(r >= r_prev)
 
+k_df_close_norm <- k_df_close |>
+  left_join(
+    theo_df_close |>
+      select(r, theo) |>
+      rename(theo_ref = theo),
+    by = "r"
+  ) |>
+  mutate(norm = iso / theo_ref) |>
+  select(-theo_ref)
+r_prev <- max(
+  k_df_close_norm$r[k_df_close_norm$r < norm_min_distance],
+  na.rm = TRUE
+)
+k_df_close_norm <- k_df_close_norm |>
+  filter(r >= r_prev)
+
+r_prev <- max(k_df_norm$r[k_df_norm$r < close_distance], na.rm = TRUE)
+k_df_far_norm <- k_df_norm |>
+  filter(r >= r_prev)
 
 # Get unique labels from k_df (same labels as in k_df_close)
 all_labels <- unique(k_df$label)
 
-# Set colors: black for theoretical line, automatic for others
+
+colors_norm <- setNames(
+  scales::brewer_pal(palette = brewer_palette)(length(all_labels)),
+  all_labels
+)
+
 colors <- c(
   setNames("black", theo_label),
-  scales::hue_pal()(length(all_labels))
+  colors_norm
 )
-names(colors) <- c(theo_label, all_labels)
-
-
 
 init("montreal_map")
 ggplot() +
@@ -205,6 +254,7 @@ ggplot() +
     size = 0.5,
     alpha = 0.5
   ) +
+  scale_color_brewer(palette = brewer_palette) +
   labs(
     x = "Longitude",
     y = "Latitude",
@@ -247,6 +297,45 @@ ggplot(k_df_close, aes(x = r, y = iso, color = label)) +
   labs(
     x = r"[Distance $r$ (\unit{\m})]",
     y = r"[$K(r)$ (\unit{\km\squared})]",
+    color = "Espèces"
+  ) +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 2, byrow = TRUE))
+end()
+
+init("correlation_norm")
+ggplot(k_df_norm, aes(x = r / 1000, y = norm, color = label)) +
+  geom_line() +
+  scale_color_manual(values = colors_norm) +
+  labs(
+    x = r"[Distance $r$ (\unit{\km})]",
+    y = r"[$\frac{K(r)}{\pi r^2}$]",
+    color = "Espèces"
+  ) +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 2, byrow = TRUE))
+end()
+
+init("correlation_close_norm")
+ggplot(k_df_close_norm, aes(x = r, y = norm, color = label)) +
+  geom_line() +
+  scale_color_manual(values = colors_norm) +
+  labs(
+    x = r"[Distance $r$ (\unit{\m})]",
+    y = r"[$\frac{K(r)}{\pi r^2}$]",
+    color = "Espèces"
+  ) +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 2, byrow = TRUE))
+end()
+
+init("correlation_far_norm")
+ggplot(k_df_far_norm, aes(x = r / 1000, y = norm, color = label)) +
+  geom_line() +
+  scale_color_manual(values = colors_norm) +
+  labs(
+    x = r"[Distance $r$ (\unit{\km})]",
+    y = r"[$\frac{K(r)}{\pi r^2}$]",
     color = "Espèces"
   ) +
   theme(legend.position = "bottom") +
