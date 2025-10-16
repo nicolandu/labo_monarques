@@ -1,8 +1,8 @@
-%filename Graphiques-asclepiade
+%filename Rapport-asclepiade
 % ltex: language=fr
 \documentclass{bio}
 \author{Harout CHOULGIAN, Akira LAFOREST et Nicolas LANDUCCI}
-\title{Analyse de base de données\\Graphiques préliminaires à titre indicatif}
+\title{Analyse de base de données\\TODO}
 \teacher{Louis-Philippe Précourt}
 \course{BIO-N02}
 \group{2}
@@ -11,58 +11,31 @@
 
 \addbibresource{monarques.bib}
 
-\newcommand{\resize}[1]{\resizebox{\textwidth}{!}{#1}}
+\newcommand{\graphic}[2]{%
+    \begin{figure}[H]
+        \centering
+        \caption{\protect#1}
+        \resizebox{\textwidth}{!}{
+            \input{#2.tikz}% compile script puts it on TEXPATH
+        }
+    \end{figure}
+}
 
 \begin{document}
 \maketitle
-%\tocpage
+\tocpage
 
 
-%\section{Introduction}
-    CSR: Complètement spatialement aléatoire \textit{Completely spatially random}\nocite{gbif.orgGBIFOccurrenceDownload2025}
-    \begin{figure}[H]
-        \centering
-        \caption{Occurrences de diverses espèces végétales et de lépidoptères à Montréal depuis 2020}
-        \resize{%
-            \input{figures/montreal_map.tex}%
-        }
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \caption{Corrélation entre les espèces}
-        \resize{%
-            \input{figures/correlation.tex}%
-        }
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \caption{Corrélation entre les espèces pour $r \le \SI{1}{\km}$}
-        \resize{%
-            \input{figures/correlation_close.tex}%
-        }
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \caption{Corrélation normalisée entre les espèces pour $r \ge \SI{50}{\m}$}
-        \resize{%
-            \input{figures/correlation_norm.tex}%
-        }
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \caption{Corrélation normalisée entre les espèces pour $\SI{50}{\m} \le r \le \SI{1}{\km}$}
-        \resize{%
-            \input{figures/correlation_close_norm.tex}%
-        }
-    \end{figure}
-    \begin{figure}[H]
-        \centering
-        \caption{Corrélation normalisée entre les espèces pour $r \ge \SI{1}{\km}$}
-        \resize{%
-            \input{figures/correlation_far_norm.tex}%
-        }
-    \end{figure}
-%\section{Contexte théorique}
+\section{Introduction}
+    CSR: Complètement spatialement aléatoire (\textit{Completely spatially random})\nocite{gbif.orgGBIFOccurrenceDownload2025}\nocite{GlobalAdministrativeAreas2022}
+
+    \graphic{Occurrences de diverses espèces végétales et de lépidoptères à Montréal depuis 2020}{montreal_map}
+    \graphic{Corrélation entre les espèces}{correlation}
+    \graphic{Corrélation entre les espèces pour $r \le \SI{1}{\km}$}{correlation_close}
+    \graphic{Corrélation normalisée entre les espèces pour $r \ge \SI{50}{\m}$}{correlation_norm}
+    \graphic{Corrélation normalisée entre les espèces pour $\SI{50}{\m} \le r \le \SI{1}{\km}$}{correlation_close_norm}
+    \graphic{Corrélation normalisée entre les espèces pour $r \ge \SI{1}{\km}$}{correlation_far_norm}
+\section{Contexte théorique}
 
 \printbibliography
 \end{document}

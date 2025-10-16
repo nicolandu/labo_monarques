@@ -3,6 +3,7 @@
 \ProvidesClass{bio_presentation}[Brebeuf bio presentation]
 
 \LoadClass[aspectratio=169]{beamer}
+\input{beamer_notes_patch}
 
 % Language and quotes
 \RequirePackage[french]{babel}
@@ -22,8 +23,6 @@
 \RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}
 
 \RequirePackage[style=apa, urldate=iso, date=iso, seconds=true, language=french]{biblatex}
-\input{french-apa-patch.tex}
-
 
 \renewcommand*{\multicitedelim}{,} % no space in [1,2,3]
 \setlength{\bibitemsep}{\parskip} % spacing between entries
@@ -72,5 +71,13 @@
 \frenchbsetup{StandardLists=true, og=«, fg=»}
 
 % Beamer
+\usefonttheme[onlymath]{serif}
 \usetheme{Dresden}
 \usecolortheme{beaver}
+\setbeamertemplate{bibliography item}[text]
+\AtBeginDocument{
+    \sisetup{
+        mode=text,
+        text-font-command=\rmfamily
+    }
+}

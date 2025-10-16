@@ -7,11 +7,15 @@ import sys
 from pathlib import Path
 
 SRC = Path("tex")
-FIGS = "figures"
+FIGS_NAME = "figures"
+FIGS = Path(FIGS_NAME)
 TMP = Path("tmp")
 OUT = Path("out")
 OUTNAME_MAGIC = r"%filename "
 OUTNAME_FMT = r"{}.pdf"
+
+my_env = os.environ.copy()
+my_env["TEXINPUTS"] = f"{FIGS.resolve()}{os.pathsep}{TMP.resolve()}{os.pathsep}"
 
 
 def clean(silent=False):
@@ -32,7 +36,7 @@ def compile(name):
         sys.exit(1)
 
     shutil.copytree(SRC, TMP)
-    shutil.copytree(Path(FIGS), TMP / FIGS)
+    shutil.copytree(FIGS, TMP / FIGS_NAME)
 
     with open(tmp_file, "r") as f:
         outname = f.readline()
@@ -51,7 +55,7 @@ def compile(name):
     ]
 
     for cmd in commands:
-        subprocess.run(cmd, cwd=TMP, check=True, shell=False)
+        subprocess.run(cmd, cwd=TMP, check=True, shell=False, env=my_env)
 
     src = TMP / f"{name}.pdf"
     dst = OUT / outname

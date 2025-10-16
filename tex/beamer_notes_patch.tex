@@ -1,0 +1,212 @@
+% This is a patch for beamer with notes
+% Usage:
+%   Input this file before set the option for notes, e.g.,
+%
+%     \documentclass{beamer}
+%     \input{beamer-notes-patch}
+%     \setbeameroption{show notes on second screen=top}
+%
+% NOTE: This may still have warnings, e.g.,
+%   xdvipdfmx:warning: Object @linkA already defined.
+%
+% Option: show notes on second screen
+%   For presentation, using the following apps to view the result pdf on macOS
+%     1. Présentation.app http://iihm.imag.fr/blanch/software/osx-presentation/
+%     2. dspdfviewer https://dspdfviewer.danny-edel.de/installation/macos.html
+%     3. pympress https://github.com/Cimbali/pympress
+%
+\usepackage{xpatch}
+\usepackage{tikz}
+\usetikzlibrary{calc,tikzmark}
+
+\makeatletter
+%% Workaround for invisible text
+%   + https://tex.stackexchange.com/q/232168/64182
+\preto\beamer@framenotesbegin{\ifbeamer@twoscreensnotes\usebeamercolor[fg]{normal text}\fi}
+%% End Workaround for invisible text
+
+%% Workaround for wrong page labels
+%   + https://github.com/josephwright/beamer/issues/807
+%   + https://tex.stackexchange.com/q/71206/64182
+\xpretocmd{\beamer@outsideframenote}{\renewcommand*{\thepage}{notes-\insertframenumber}}%
+  {}{\errmessage{^^J Prepend beamer@outsideframenote to re-define thepage FAILED ^^J}}
+
+\xpatchcmd{\beamer@outsideframenote}{\pgfpagescurrentpagewillbelogicalpage}{% replace
+  % Do not output page label when create note page (logical page)
+  \renewcommand*{\HyPL@EveryPage}{\ltx@empty}%
+  % To disable warnings:
+  %   xdvipdfmx:warning: Object @Navigation1 already defined.
+  %   xdvipdfmx:warning: Object @page.1 already defined.
+  \renewcommand*{\Hy@EveryPageAnchor}{\ltx@empty}%
+  \pgfpagescurrentpagewillbelogicalpage}%
+  {}{\errmessage{^^JPatch beamer@outsideframenote for note page FAILED ^^J}}%
+%% End Workaround for wrong page labels
+
+%% Workaround for wrong links position
+%   + https://github.com/pgf-tikz/pgf/issues/744
+%   + https://github.com/pgf-tikz/pgf/issues/189
+%
+% redefine the option to insert some patch code
+\defbeameroption{show notes on second screen}[right]%
+{
+  \ifx\@onlypreamble\@notprerr
+    \ltx@ifpackageloaded{pgfpages}{}{%
+      \ClassError{beamer}{`pgfpages' package necessary for this option}{}%
+    }%
+  \else%
+    \RequirePackage{pgfpages}%
+  \fi%
+  \pgfpagesuselayout{two screens with optional second}[second #1]
+  \set@cmd@for@two@screen@option{#1} % Workaround for links
+  \beamer@twoscreensnotestrue
+  \beamer@notestrue
+}
+
+\ExplSyntaxOn
+\NewExpandableDocumentCommand{\set@cmd@for@two@screen@option}{m}
+  {
+    \str_case_e:nnF {#1}
+      {
+        {right}{
+          \def\paper@x@shift{\paperwidth}
+          \def\paper@y@shift{0}
+          \patch@beamer@template@note@page{@shift}{@default}
+        }
+        {left}{
+          \def\paper@x@shift{\paperwidth}
+          \def\paper@y@shift{0}
+          \set@hyper@link@cmd{@shift}
+          \patch@beamer@template@note@page{@default}{@shift}
+        }
+        {bottom}{
+          \def\paper@x@shift{0}
+          \def\paper@y@shift{\paperheight}
+          \set@hyper@link@cmd{@shift}
+          \patch@beamer@template@note@page{@default}{@shift}
+        }
+        {top}{
+          \def\paper@x@shift{0}
+          \def\paper@y@shift{\paperheight}
+          \patch@beamer@template@note@page{@shift}{@default}
+        }
+      }
+      {\errmessage{ERROR: two screen option #1 not found}}
+  }
+\ExplSyntaxOff
+
+\newcommand{\patch@beamer@template@note@page}[2]{%
+  \xpatchcmd{\beamer@outsideframenote}{\usebeamertemplate*{note page}}{%
+    \set@hyper@link@cmd{#1}\usebeamertemplate*{note page}\set@hyper@link@cmd{#2}}{}{%
+    \errmessage{^^JPatch beamer@outsideframenote to wrap usebeamertemplate*{note page} FAILED^^J}}
+}
+
+\newcommand{\set@hyper@link@cmd}[2][]{%
+  \renewcommand*{\do}[1]{\csletcs{##1#1}{##1#2}}%
+  \docsvlist{hyper@link@, hyper@linkurl, href, Acrobatmenu}%
+}
+
+% save the default value of hyperref commands
+\set@hyper@link@cmd[@default]{}
+
+%  Base on @projekter's idea to move the link to correct position
+%    https://github.com/pgf-tikz/pgf/issues/744#issuecomment-546716734
+%
+\newcount\shift@link@mark@count
+\newenvironment{link@tikzpicture}[1]{%
+  \edef\mark@name@tmp{shift-link-mark-\the\shift@link@mark@count}%
+  \tikzmark{\mark@name@tmp}\color{blue}#1%
+  \begin{tikzpicture}[remember picture, overlay]%
+    \node at ($(pic cs:\mark@name@tmp) + (\paper@x@shift, \paper@y@shift)$)%
+    % \node at ($(pic cs:\mark@name@tmp)$)%
+    [inner sep=0pt, outer sep=0pt, anchor=base west, text width=\textwidth]%
+}{%
+  \end{tikzpicture}%
+  \global\advance\shift@link@mark@count 1\relax%
+}
+\def\hyper@link@@shift[#1]#2#3#4{%
+  \begin{link@tikzpicture}{#4}%
+    {\color{red}\hyper@link@@default[{#1}]{#2}{#3}{#4}};%
+  \end{link@tikzpicture}%
+}
+\def\hyper@linkurl@shift#1#2{%
+  \begin{link@tikzpicture}{\HyOrg@url{#2}}%
+    {\color{red}\hyper@linkurl@default{#1}{#2}};%
+  \end{link@tikzpicture}%
+}
+\def\Acrobatmenu@shift#1#2{%
+  \begin{link@tikzpicture}{#2}%
+    {\color{red}\Acrobatmenu@default{#1}{#2}};%
+  \end{link@tikzpicture}%
+}
+
+% href needs some special operation
+\newcommand{\href@shift}[3][]{%
+  \begingroup%
+    \let\hyper@linkurl\hyper@linkurl@default%
+    \href@default[{#1}]{#2}{#3}%
+    \let\hyper@linkurl\hyper@linkurl@shift%
+  \endgroup%
+}
+
+% Disable the link of mini-slides on note page
+% NOTE: This patch works for XeTeX and LuaTeX
+\usepackage{iftex}
+\ifxetex
+  % https://mirror-hk.koddos.net/CTAN/dviware/dvipdfm/dvipdfm.pdf
+  \newcommand\patch@pdf@nolink{\special{pdf:nolink}}
+  \newcommand\patch@pdf@link{\special{pdf:link}}
+  \newcommand{\patch@filterlinks}[1]{\relax}
+\fi
+\ifpdftex
+  \newcommand\patch@pdf@nolink{\pdfrunninglinkoff}
+  \newcommand\patch@pdf@link{\pdfrunninglinkon}
+  \newcommand{\patch@filterlinks}[1]{\relax}
+\fi
+\ifluatex
+  % https://tug.org/TUGboat/tb32-1/tb100isambert.pdf
+  % http://mirrors.ctan.org/systems/doc/luatex/luatex.pdf
+  \usepackage{luacode}
+  \begin{luacode*}
+    function delete_links(head, n)
+      local GLUE = node.id('glue')
+      local WHATSIT = node.id('whatsit')
+      local SLINK = node.subtype('pdf_start_link')
+      local ELINK = node.subtype('pdf_end_link')
+      local DEST = node.subtype('pdf_dest')
+      local current = head
+      while current do
+        -- texio.write_nl(string.format("[%d] Node type: %s, Subtype: %s",
+        --     n, current.id, current.subtype))
+        if current.id == WHATSIT and
+            (current.subtype == SLINK or current.subtype == ELINK or current.subtype == DEST) then
+          head, current = node.remove(head, current)
+        elseif current.id == GLUE then -- sub-list in leader
+          current.leader = delete_links(current.leader, n+1)
+        elseif current.head then
+          current.head = delete_links(current.head, n+1)
+        end
+        current = current.next
+      end
+      return head
+    end
+    function filter_links(boxnum)
+      local box = tex.box[boxnum]
+      if box then
+        box.head = delete_links(box.head, 0)
+      end
+    end
+  \end{luacode*}
+
+  \protected\def\patch@pdf@nolink{\relax}
+  \protected\def\patch@pdf@link{\relax}
+  \newcommand{\patch@filterlinks}[1]{\directlua{filter_links(#1)}}
+\fi
+
+\let\old@insertslideintonotes\insertslideintonotes
+\renewcommand{\insertslideintonotes}[1]{%
+  \patch@filterlinks{\the\beamer@frameboxcopy}% remove the link when using lautex
+  %\showboxbreadth=\maxdimen\showboxdepth=\maxdimen\showbox\beamer@frameboxcopy%
+  \patch@pdf@nolink\old@insertslideintonotes{#1}\patch@pdf@link%
+  }
+%% End Workaround for wrong links position
+\makeatother

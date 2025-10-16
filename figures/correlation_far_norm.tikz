@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.12.6 on 2025-10-13 00:35:54
+% Created by tikzDevice version 0.12.6 on 2025-10-15 23:39:38
 % !TEX encoding = UTF-8 Unicode
 \begin{tikzpicture}[x=1pt,y=1pt]
 \definecolor{fillColor}{RGB}{255,255,255}
@@ -3736,138 +3736,138 @@
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.10] at ( 13.01,313.75) {$\frac{K(r)}{\pi r^2}$};
+\node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.10] at ( 13.01,313.75) {$\frac{K_{AB}(r)}{\pi r^2}$};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{RGB}{255,255,255}
 
-\path[fill=fillColor] ( 55.88,  5.50) rectangle (476.29, 90.82);
+\path[fill=fillColor] ( 34.47,  5.50) rectangle (497.70, 90.82);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.10] at ( 61.38, 44.40) {Espèces};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  1.10] at ( 39.97, 44.40) {Espèces ($A \times B$)};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (104.11, 70.86) rectangle (118.57, 85.32);
+\path[fill=fillColor] (125.52, 70.86) rectangle (139.97, 85.32);
 \definecolor{drawColor}{RGB}{102,166,30}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (105.56, 78.09) -- (117.12, 78.09);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 78.09) -- (138.53, 78.09);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (285.78, 70.86) rectangle (300.23, 85.32);
+\path[fill=fillColor] (307.18, 70.86) rectangle (321.64, 85.32);
 \definecolor{drawColor}{RGB}{230,171,2}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (287.22, 78.09) -- (298.78, 78.09);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 78.09) -- (320.19, 78.09);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (104.11, 50.91) rectangle (118.57, 65.36);
+\path[fill=fillColor] (125.52, 50.91) rectangle (139.97, 65.36);
 \definecolor{drawColor}{RGB}{117,112,179}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (105.56, 58.14) -- (117.12, 58.14);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 58.14) -- (138.53, 58.14);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (285.78, 50.91) rectangle (300.23, 65.36);
+\path[fill=fillColor] (307.18, 50.91) rectangle (321.64, 65.36);
 \definecolor{drawColor}{RGB}{231,41,138}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (287.22, 58.14) -- (298.78, 58.14);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 58.14) -- (320.19, 58.14);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (104.11, 30.95) rectangle (118.57, 45.41);
+\path[fill=fillColor] (125.52, 30.95) rectangle (139.97, 45.41);
 \definecolor{drawColor}{RGB}{27,158,119}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (105.56, 38.18) -- (117.12, 38.18);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 38.18) -- (138.53, 38.18);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (285.78, 30.95) rectangle (300.23, 45.41);
+\path[fill=fillColor] (307.18, 30.95) rectangle (321.64, 45.41);
 \definecolor{drawColor}{RGB}{217,95,2}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (287.22, 38.18) -- (298.78, 38.18);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 38.18) -- (320.19, 38.18);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (104.11, 11.00) rectangle (118.57, 25.45);
+\path[fill=fillColor] (125.52, 11.00) rectangle (139.97, 25.45);
 \definecolor{drawColor}{RGB}{166,118,29}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (105.56, 18.23) -- (117.12, 18.23);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 18.23) -- (138.53, 18.23);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{fillColor}{gray}{0.92}
 
-\path[fill=fillColor] (285.78, 11.00) rectangle (300.23, 25.45);
+\path[fill=fillColor] (307.18, 11.00) rectangle (321.64, 25.45);
 \definecolor{drawColor}{gray}{0.40}
 
-\path[draw=drawColor,line width= 0.6pt,line join=round] (287.22, 18.23) -- (298.78, 18.23);
+\path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 18.23) -- (320.19, 18.23);
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (124.07, 75.08) {\textit{Arctium lappa} $\times$ \textit{Danaus plexippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (145.47, 75.08) {\textit{Arctium lappa} $\times$ \textit{Danaus plexippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (305.73, 75.08) {\textit{Arctium lappa} $\times$ \textit{Limenitis archippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (327.14, 75.08) {\textit{Arctium lappa} $\times$ \textit{Limenitis archippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (124.07, 55.13) {\textit{Asclepias incarnata} $\times$ \textit{Danaus plexippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (145.47, 55.13) {\textit{Asclepias incarnata} $\times$ \textit{Danaus plexippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (305.73, 55.13) {\textit{Asclepias incarnata} $\times$ \textit{Limenitis archippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (327.14, 55.13) {\textit{Asclepias incarnata} $\times$ \textit{Limenitis archippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (124.07, 35.18) {\textit{Asclepias syriaca} $\times$ \textit{Danaus plexippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (145.47, 35.18) {\textit{Asclepias syriaca} $\times$ \textit{Danaus plexippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (305.73, 35.18) {\textit{Asclepias syriaca} $\times$ \textit{Limenitis archippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (327.14, 35.18) {\textit{Asclepias syriaca} $\times$ \textit{Limenitis archippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (124.07, 15.22) {\textit{Solidago canadensis} $\times$ \textit{Danaus plexippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (145.47, 15.22) {\textit{Solidago canadensis} $\times$ \textit{Danaus plexippus}};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (305.73, 15.22) {\textit{Solidago canadensis} $\times$ \textit{Limenitis archippus}};
+\node[text=drawColor,anchor=base west,inner sep=0pt, outer sep=0pt, scale=  0.88] at (327.14, 15.22) {\textit{Solidago canadensis} $\times$ \textit{Limenitis archippus}};
 \end{scope}
 \end{tikzpicture}

@@ -49,7 +49,7 @@ use_tikz <- TRUE
 
 init <- function(name) {
   if (use_tikz) {
-    tikz(glue("{output_dir}/{name}.tex"),
+    tikz(glue("{output_dir}/{name}.tikz"),
       width = 7, height = 7, standAlone = FALSE,
     )
   }
@@ -277,9 +277,8 @@ ggplot(k_df, aes(x = r / 1000, y = iso, color = label)) +
   ) +
   scale_color_manual(values = colors) +
   labs(
-    x = r"[Distance $r$ (\unit{\km})]",
-    y = r"[$K(r)$ (\unit{\km\squared})]",
-    color = "Espèces"
+    x = r"[Distance $r$ (\unit{\km})]", y = r"[$K_{AB}(r)$ (\unit{\km\squared})]",
+    color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 2, byrow = TRUE))
@@ -296,8 +295,8 @@ ggplot(k_df_close, aes(x = r, y = iso, color = label)) +
   scale_color_manual(values = colors) +
   labs(
     x = r"[Distance $r$ (\unit{\m})]",
-    y = r"[$K(r)$ (\unit{\km\squared})]",
-    color = "Espèces"
+    y = r"[$K_{AB}(r)$ (\unit{\km\squared})]",
+    color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 2, byrow = TRUE))
@@ -309,8 +308,8 @@ ggplot(k_df_norm, aes(x = r / 1000, y = norm, color = label)) +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\km})]",
-    y = r"[$\frac{K(r)}{\pi r^2}$]",
-    color = "Espèces"
+    y = r"[$\frac{K_{AB}(r)}{\pi r^2}$]",
+    color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 2, byrow = TRUE))
@@ -322,8 +321,8 @@ ggplot(k_df_close_norm, aes(x = r, y = norm, color = label)) +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\m})]",
-    y = r"[$\frac{K(r)}{\pi r^2}$]",
-    color = "Espèces"
+    y = r"[$\frac{K_{AB}(r)}{\pi r^2}$]",
+    color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 2, byrow = TRUE))
@@ -335,8 +334,8 @@ ggplot(k_df_far_norm, aes(x = r / 1000, y = norm, color = label)) +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\km})]",
-    y = r"[$\frac{K(r)}{\pi r^2}$]",
-    color = "Espèces"
+    y = r"[$\frac{K_{AB}(r)}{\pi r^2}$]",
+    color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(ncol = 2, byrow = TRUE))
