@@ -49,6 +49,9 @@
        {\addspace\mkbibbrackets{\thefield{eprintclass}}}}}
 
 \makeatother
+\DefineBibliographyStrings{french}{
+    references = {Médiagraphie},
+}
 
 \DeclareCiteCommand{\citetitleplain}
   {\usebibmacro{prenote}}

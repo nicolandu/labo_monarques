@@ -4,13 +4,13 @@ options(
   tikzDefaultEngine = "luatex",
   tikzLualatexPackages = c(
     r"[\usepackage{tikz}]",
-    r"[\RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}]" # nolint: line_length_linter.
+    r"[\usepackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}]" # nolint: line_length_linter.
   )
 )
 
 library(dplyr)
 library(finch)
-library(ggplot2)
+library(ggplot2) # NEED VERSION 3.x.x (3.5.1), not 4.x.x!
 library(glue)
 library(scales)
 library(sf)
@@ -110,13 +110,12 @@ occ <- occ[
   occ$verbatimScientificName %in% c(a_species, b_species),
 ]
 
-occ_proj <- st_transform(occ, 32188) # NAD83
+occ_proj <- st_transform(occ, 2950) # NAD83(CSRS) / MTM zone 8
 
 occ_proj <- subset(occ_proj, verbatimScientificName %in% all_species)
 
 tmp_coords <- st_coordinates(occ_proj)
-dup_locs <- duplicated(tmp_coords)
-occ_proj <- occ_proj[!dup_locs, ]
+occ_proj <- occ_proj[!duplicated(tmp_coords), ]
 coords <- st_coordinates(occ_proj)
 
 # Reorder factor
@@ -130,7 +129,7 @@ occ_proj <- occ_proj |>
 canada <- st_read(canada_shapefile, layer = "ADM_ADM_2")
 mtl <- canada[canada$NAME_2 == mtl_name, ]
 
-mtl_proj <- st_transform(mtl, 32188) # NAD83
+mtl_proj <- st_transform(mtl, 2950) # NAD83(CSRS) / MTM zone 8
 mtl_win <- as.owin(mtl_proj)
 
 combined <- ppp(coords[, "X"], coords[, "Y"],
@@ -277,7 +276,8 @@ ggplot(k_df, aes(x = r / 1000, y = iso, color = label)) +
   ) +
   scale_color_manual(values = colors) +
   labs(
-    x = r"[Distance $r$ (\unit{\km})]", y = r"[$K_{AB}(r)$ (\unit{\km\squared})]",
+    x = r"[Distance $r$ (\unit{\km})]",
+    y = r"[$K_{AB}(r)$ (\unit{\km\squared})]",
     color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
@@ -308,7 +308,7 @@ ggplot(k_df_norm, aes(x = r / 1000, y = norm, color = label)) +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\km})]",
-    y = r"[$\frac{K_{AB}(r)}{\pi r^2}$]",
+    y = r"[$K_{AB}^*(r)$]",
     color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
@@ -321,7 +321,7 @@ ggplot(k_df_close_norm, aes(x = r, y = norm, color = label)) +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\m})]",
-    y = r"[$\frac{K_{AB}(r)}{\pi r^2}$]",
+    y = r"[$K_{AB}^*(r)$]",
     color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +
@@ -334,7 +334,7 @@ ggplot(k_df_far_norm, aes(x = r / 1000, y = norm, color = label)) +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\km})]",
-    y = r"[$\frac{K_{AB}(r)}{\pi r^2}$]",
+    y = r"[$K_{AB}^*(r)$]",
     color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +

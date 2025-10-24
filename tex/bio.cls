@@ -11,6 +11,8 @@
 \setlength{\medskipamount}{2\medskipamount}
 \setlength{\bigskipamount}{2\bigskipamount}
 
+\sloppy % whatever
+
 \RequirePackage{titlesec}
 
 % Language and quotes
@@ -40,10 +42,8 @@
 
 \RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}
 
-% Patched since TeX Live is not up to date
 \RequirePackage[style=apa, sortcites, language=french]{biblatex}
 
-\renewcommand*{\multicitedelim}{,} % no space in [1,2,3]
 \setlength{\bibitemsep}{\parskip} % spacing between entries
 \setlength{\bibparsep}{0pt} % spacing between paragraphs in a single entry
 \DeclareFieldFormat{eprint:hdl}{%
@@ -68,6 +68,9 @@
        {\addspace\mkbibbrackets{\thefield{eprintclass}}}}}
 
 \makeatother
+\DefineBibliographyStrings{french}{
+    references = {Médiagraphie},
+}
 
 \RequirePackage{icomma} % no space after decimal comma
 

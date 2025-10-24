@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.12.6 on 2025-10-15 23:39:38
+% Created by tikzDevice version 0.12.6 on 2025-10-24 00:33:14
 % !TEX encoding = UTF-8 Unicode
 \begin{tikzpicture}[x=1pt,y=1pt]
 \definecolor{fillColor}{RGB}{255,255,255}
@@ -3736,7 +3736,7 @@
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
 
-\node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.10] at ( 13.01,313.75) {$\frac{K_{AB}(r)}{\pi r^2}$};
+\node[text=drawColor,rotate= 90.00,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.10] at ( 13.01,313.75) {$K_{AB}^*(r)$};
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
@@ -3755,6 +3755,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (125.52, 70.86) rectangle (139.97, 85.32);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{102,166,30}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 78.09) -- (138.53, 78.09);
@@ -3764,6 +3767,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (307.18, 70.86) rectangle (321.64, 85.32);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{230,171,2}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 78.09) -- (320.19, 78.09);
@@ -3773,6 +3779,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (125.52, 50.91) rectangle (139.97, 65.36);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{117,112,179}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 58.14) -- (138.53, 58.14);
@@ -3782,6 +3791,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (307.18, 50.91) rectangle (321.64, 65.36);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{231,41,138}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 58.14) -- (320.19, 58.14);
@@ -3791,6 +3803,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (125.52, 30.95) rectangle (139.97, 45.41);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{27,158,119}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 38.18) -- (138.53, 38.18);
@@ -3800,6 +3815,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (307.18, 30.95) rectangle (321.64, 45.41);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{217,95,2}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 38.18) -- (320.19, 38.18);
@@ -3809,6 +3827,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (125.52, 11.00) rectangle (139.97, 25.45);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{166,118,29}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (126.96, 18.23) -- (138.53, 18.23);
@@ -3818,6 +3839,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (307.18, 11.00) rectangle (321.64, 25.45);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{gray}{0.40}
 
 \path[draw=drawColor,line width= 0.6pt,line join=round] (308.63, 18.23) -- (320.19, 18.23);

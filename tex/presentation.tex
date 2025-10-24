@@ -30,16 +30,12 @@
 CSR: Complètement spatialement aléatoire (\textit{Completely spatially random})\nocite{gbif.orgGBIFOccurrenceDownload2025}\nocite{GlobalAdministrativeAreas2022}
 \end{frame}
 \begin{frame}
-	\frametitle{Occurrences de diverses espèces végétales et de lépidoptères à Montréal depuis 2020}
+	\frametitle{Occurrences de diverses espèces végétales et de lépidoptères sur l'île de Montréal depuis 2020}
     \graphic{montreal_map}
     \note{Testing for Pympress}
 \end{frame}
 \begin{frame}
 	\frametitle{Corrélation entre les espèces}
-    \sisetup{
-        mode=text,
-        text-font-command=\rmfamily
-    }
 	\graphic{correlation}
     \note{
         \begin{itemize}
@@ -68,71 +64,4 @@ CSR: Complètement spatialement aléatoire (\textit{Completely spatially random}
 \section{Contexte théorique}
 
 \printbibliography
-\end{document}
-
-\begin{document}
-\frame{\titlepage}
-
-\section{Introduction}
-\begin{frame}
-	Hi~\cite{gbif.orgGBIFOccurrenceDownload2025}
-
-	CSR: Complètement spatialement aléatoire \textit{Completely spatially random}\nocite{gbif.orgGBIFOccurrenceDownload2025}
-\end{frame}
-\begin{frame}
-	\frametitle{Occurrences de diverses espèces végétales et de lépidoptères à Montréal depuis 2020}
-	\begin{figure}[H]
-		\centering
-		\resize{%
-			\input{figures/montreal_map.tex}%
-		}
-	\end{figure}
-\end{frame}
-\begin{frame}
-	\caption{Corrélation entre les espèces}
-	\begin{figure}[H]
-		\centering
-		\resize{%
-			\input{figures/correlation.tex}%
-		}
-	\end{figure}
-\end{frame}
-\begin{frame}
-	\caption{Corrélation entre les espèces pour $r \le \SI{1}{\km}$}
-	\begin{figure}[H]
-		\centering
-		\resize{%
-			\input{figures/correlation_close.tex}%
-		}
-	\end{figure}
-\end{frame}
-\begin{frame}
-	\caption{Corrélation normalisée entre les espèces pour $r \ge \SI{50}{\m}$}
-	\begin{figure}[H]
-		\centering
-		\resize{%
-			\input{figures/correlation_norm.tex}%
-		}
-	\end{figure}
-\end{frame}
-\begin{frame}
-	\caption{Corrélation normalisée entre les espèces pour $\SI{50}{\m} \le r \le \SI{1}{\km}$}
-	\begin{figure}[H]
-		\centering
-		\resize{%
-			\input{figures/correlation_close_norm.tex}%
-		}
-	\end{figure}
-\end{frame}
-\begin{frame}
-	\caption{Corrélation normalisée entre les espèces pour $r \ge \SI{1}{\km}$}
-	\begin{figure}[H]
-		\centering
-		\resize{%
-			\input{figures/correlation_far_norm.tex}%
-		}
-	\end{figure}
-\end{frame}
-\printbibliography
-
 \end{document}

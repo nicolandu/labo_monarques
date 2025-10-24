@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.12.6 on 2025-10-15 23:38:37
+% Created by tikzDevice version 0.12.6 on 2025-10-24 00:32:06
 % !TEX encoding = UTF-8 Unicode
 \begin{tikzpicture}[x=1pt,y=1pt]
 \definecolor{fillColor}{RGB}{255,255,255}
@@ -7835,6 +7835,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (162.46, 49.80) rectangle (176.91, 64.25);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{27,158,119}
 \definecolor{fillColor}{RGB}{27,158,119}
 
@@ -7845,6 +7848,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (249.02, 49.80) rectangle (263.48, 64.25);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{217,95,2}
 \definecolor{fillColor}{RGB}{217,95,2}
 
@@ -7855,6 +7861,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (343.64, 49.80) rectangle (358.09, 64.25);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{117,112,179}
 \definecolor{fillColor}{RGB}{117,112,179}
 
@@ -7865,6 +7874,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (162.46, 29.84) rectangle (176.91, 44.30);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{231,41,138}
 \definecolor{fillColor}{RGB}{231,41,138}
 
@@ -7875,6 +7887,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (249.02, 29.84) rectangle (263.48, 44.30);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{102,166,30}
 \definecolor{fillColor}{RGB}{102,166,30}
 
@@ -7885,6 +7900,9 @@
 \definecolor{fillColor}{gray}{0.92}
 
 \path[fill=fillColor] (343.64, 29.84) rectangle (358.09, 44.30);
+\end{scope}
+\begin{scope}
+\path[clip] (  0.00,  0.00) rectangle (505.89,505.89);
 \definecolor{drawColor}{RGB}{230,171,2}
 \definecolor{fillColor}{RGB}{230,171,2}
 
