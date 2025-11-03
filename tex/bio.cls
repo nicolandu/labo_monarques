@@ -1,11 +1,11 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{bio}[Brebeuf bio lab report]
 
-\LoadClass[letterpaper]{article}
+\LoadClass[letterpaper, twoside]{article}
 
 \RequirePackage{calc} % first, so that others have the good skips
 
-\RequirePackage[top=30mm, left=40mm, bottom=25mm, right=25mm]{geometry}
+\RequirePackage[top=30mm, left=40mm, bottom=25mm, right=25mm, asymmetric]{geometry}
 
 \setlength{\smallskipamount}{2\smallskipamount}
 \setlength{\medskipamount}{2\medskipamount}
@@ -20,6 +20,7 @@
 \RequirePackage{csquotes}
 
 \RequirePackage[skip]{parskip}
+\RequirePackage{fancyhdr}
 
 \RequirePackage{tocloft}
 \renewcommand{\cftdotsep}{1} % spacing between dots
@@ -72,6 +73,10 @@
     references = {Médiagraphie},
 }
 
+\AtEveryBibitem{
+  \clearfield{labelday}
+}
+
 \RequirePackage{icomma} % no space after decimal comma
 
 \RequirePackage{enumitem}
@@ -85,18 +90,17 @@
 % Non-breaking thin space for guillemets
 \frenchbsetup{StandardLists=true, og=«, fg=»}
 
-
 % Level 1
-\setlist[enumerate,1]{label=\arabic*., ref=\it\arabic*}
+\setlist[enumerate, 1]{label=\arabic*., ref=\it\arabic*}
 
 % Level 2
-\setlist[enumerate,2]{label=\alph*), ref=\it\alph*}
+\setlist[enumerate, 2]{label=\alph*), ref=\it\alph*}
 
 % Level 3
-\setlist[enumerate,3]{label=\roman*., ref=\it\roman*}
+\setlist[enumerate, 3]{label=\roman*., ref=\it\roman*}
 
 % Level 4
-\setlist[enumerate,4]{label=\Alph*., ref=\it\Alph*}
+\setlist[enumerate, 4]{label=\Alph*., ref=\it\Alph*}
 
 \makeatletter
 \newcommand{\teacher}[1]{
@@ -131,7 +135,10 @@
     \end{center}
     \clearpage
 }
+\let\@oldprintbibliography\printbibliography
+\renewcommand{\printbibliography}{\@oldprintbibliography[heading=bibintoc]}
 \makeatother
+\setcounter{secnumdepth}{0}
 
 \newcommand{\tocpage}{
     \pagenumbering{roman}
@@ -142,4 +149,9 @@
     \clearpage
     \pagenumbering{arabic}
     \setcounter{page}{1}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyfoot[RO]{\thepage}
+    \fancyfoot[LE]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
 }

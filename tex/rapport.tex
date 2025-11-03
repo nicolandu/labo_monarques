@@ -1,25 +1,7 @@
 %filename Rapport-asclepiade
 % ltex: language=fr
 \documentclass{bio}
-\author{Harout CHOULGIAN, Akira LAFOREST et Nicolas LANDUCCI}
-\title{Analyse de base de données\\TODO}
-\teacher{Louis-Philippe Précourt}
-\course{BIO-N02}
-\group{2}
-\department{Biologie}
-\date{4 novembre 2025}
 
-\addbibresource{monarques.bib}
-
-\newcommand{\graphic}[2]{%
-    \begin{figure}[H]
-        \centering
-        \caption{\protect#1}
-        \resizebox{\textwidth}{!}{
-            \input{#2.tikz}% compile script puts it on TEXPATH
-        }
-    \end{figure}
-}
 
 % Per https://wwwnc.cdc.gov/eid/page/scientific-nomenclature:
 % For organisms other than bacteria, fungi, and viruses, scientific names of taxa above the genus level (families, orders, etc.) should be in roman type.
@@ -35,38 +17,69 @@
 \newcommand{\danausplexippus}{\textit{Danaus plexippus}}
 \newcommand{\limenitisarchippus}{\textit{Limenitis archippus}}
 
+\author{Harout CHOULGIAN, Akira LAFOREST et Nicolas LANDUCCI}
+\title{ANALYSE DE BASE DE DONNÉES\\Analyse de la corrélation spatiale entre les espèces du genre \asclepias\ et \danausplexippus\ sur l'île de Montréal}
+\teacher{Louis-Philippe Précourt}
+\course{BIO-N02}
+\group{2}
+\department{Biologie}
+\date{4 novembre 2025}
+
+\newcommand{\graphic}[2]{%
+    \begin{figure}[H]
+        \centering
+        \caption{\protect#1}
+        \resizebox{\textwidth}{!}{
+            \input{#2.tikz}% compile script puts it on TEXPATH
+        }
+        \label{fig:#2}
+    \end{figure}
+}
+
 \newcommand{\kab}{K_{AB}(r)}
 \newcommand{\normkab}{K_{AB}^*(r)}
 
 \newcommand{\laxqty}[2]{\qty[parse-numbers=false]{#1}{#2}}
 
+\addbibresource{monarques.bib}
+
 \begin{document}
 \maketitle
 \tocpage
 
-
 \section{Introduction}
     Le monarque (\danausplexippus) est un papillon parmi les plus connus et étudiés au monde. Espèce migratrice, le monarque passe ses hivers dans les forêts du sud des États-Unis et du centre du Mexique \parencite{cosewicCOSEWICAssessmentStatus2016}. La larve de \danausplexippus\ se nourrit exclusivement d'asclépiades (genre \asclepias), une plante endémique du Canada et aux États-Unis sur laquelle elle pond ses \oe ufs \parencite{lunaMonarchsDanausPlexippus2013}. Cependant, ces dernières, en raison de leur croissance agressive, ont été listées jusqu'en 2014 comme des mauvaises herbes nuisibles; à la lumière de l'importance qu'ont ces espèces dans le cycle de vie de \danausplexippus, la famille a été délistée afin d'essayer de contrer le déclin du monarque \parencite{abassTestingGerminationCommon2025}, dont la population semble avoir diminué de \qty{83}{\percent} entre 1994 et 2015 en termes de surface occupée au Mexique \parencite{cosewicCOSEWICAssessmentStatus2016}.
-
     L'objectif de ce rapport est d'étudier la corrélation spatiale croisée entre les espèces du genre \asclepias\ et \danausplexippus\ dans l'agglomération de Montréal. Étant donné le regroupement des espaces verts à Montréal, la corrélation attendue pour chacune des espèces est positive. De même, \danausplexippus\ se nourrissant exclusivement d'asclépiades au stade larvaire, il est possible de penser que la corrélation entre les observations de monarques adultes et les asclépiades est supérieure à celle entre d'autres paires d'espèces.
 
     Afin de corréler les espèces, des observations du \textit{Global Biodiversity Information Facility} (GBIF), une plateforme ouverte d'agrégation d'occurrences biologiques, seront utilisées. Les observations de diverses espèces végétales, dont le genre \asclepias, seront corrélées en fonction de la distance avec celles d'espèces de lépidoptères (\lepidoptera), dont \danausplexippus.
 
 \section{Contexte théorique}
+    La population du papillon monarque est en déclin, un phénomène largement documenté par la communauté scientifique. À ce sujet, les chercheurs s'accordent sur le fait que ce déclin est lié à la destruction des plantes dont se nourrissent les monarques \parencite{boyleMonarchButterflyMilkweed2019}. En effet, les chenilles de \danausplexippus\ se nourrissent exclusivement de feuilles d'asclépiade, une plante toxique. Les monarques ont développé une résistance au glycoside cardiaque, la toxine présente dans ces feuilles. Cette substance est devenue un mécanisme de défense contre les prédateurs, car elle reste dans l'exosquelette des papillons et rend leur consommation dangereuse pour d'éventuels prédateurs, ce qui est reflété par la coloration aposématique du monarque.
 
+    Depuis plusieurs décennies, la population de \danausplexippus\ a diminué dans les milieux urbains et agricoles, à un point tel qu'il est inscrit en tant qu'espèce en voie de disparition en vertu de la \textit{\citetitle{LoiEspecesPeril2002}} au Canada depuis le 8 décembre 2023 \parencite{LoiEspecesPeril2002}. Cette baisse est majoritairement due à l'utilisation croissante d'herbicides, qui réduit la présence des asclépiades. Or, la disponibilité de ces plantes est cruciale pour le développement des papillons monarques \parencite{u.s.nationalparkserviceMilkweedMonarchs2023}.
+
+    En plus de la diminution des populations de sa plante hôte, l'asclépiade, le monarque est également affecté par d'autres facteurs tant biotiques qu'abiotiques, dont les changements climatiques. En effet, le taux de recrutement de \danausplexippus\ (le taux d'individus arrivant à leur maturité) est négativement affecté par des variations de température: la chaleur ou la sécheresse réduisent l'espérance de vie et le taux de reproduction du monarque, tandis que des conditions trop fraîches ou humides réduisent sa durée de croissance et son taux de ponte \parencite{ragabImpactClimateChange2025, richImpactTemperatureReproductive2025}. Ainsi, dans chacun des scénarios qu'ils ont évalués, \citeauthor{ragabImpactClimateChange2025} projettent une réduction à long terme de l'habitat stable de \danausplexippus\ par rapport aux modèles à long terme, tant en considérant des scénarios à fortes et à faibles émissions de gaz à effet de serre (GES).
+
+    Face aux multiples obstacles dans le cycle de développement de \danausplexippus, il est important d'évaluer la présence du monarque, notamment en milieu urbain: dans un tel milieu, les conditions de vie diffèrent grandement de conditions rurales, entre autres en raison d'îlots de chaleur \citeauthor{batoolHowLatitudeUrban2024}.
+
+    \subsection{La corrélation spatiale croisée}
+        La corrélation croisée entre deux espèces~$A$ et~$B$ permet de mesurer le caractère attractif ou répulsif de l'interaction entre~$A$ et~$B$. Pour ce faire, il est possible d'utiliser l'\textit{indice de Ripley bivarié}, qui mesure l'aire équivalente~$\kab$ du nombre d'individus moyen~$n$ de l'espèce~$B$ dans un rayon~$r$ d'un individu de l'espèce~$A$, dans une zone d'étude donnée. Ainsi, à l'échelle d'une zone d'étude donnée ayant une densité $\rho = N/S$ de l'espèce~$B$, où $N$~est le nombre total d'individus de l'espèce~$B$ et où $S$~est l'aire de la zone d'étude, $\kab = n/\rho$.
+
+        Si la distribution de l'espèce~$B$ est complètement spatialement aléatoire (CSR/\textit{completely spatially random}), et peut donc être décrite par un processus de Poisson ponctuel de densité $\rho$, la valeur attendue du nombre d'individus~$n$ dans un rayon~$r$ d'un individu de l'espèce~$B$ est~$\pi r^2 \rho$. Pour un modèle CSR, la valeur attendue de~$\kab$ est donc~$\pi r^2$. Par conséquent, à l'échelle d'un rayon~$r$, $\kab > \pi r^2$ est indicatif d'une attraction de l'espèce~$B$ par la présence de l'espèce~$A$ et, \textit{a contrario}, $\kab < \pi r^2$ est indicatif d'une répulsion de l'espèce~$B$ par la présence de l'espèce~$A$.
+
+        Il est également possible de normaliser~$\kab$ par rapport au modèle CSR, selon $\normkab = \kab/\pi r^2$. Dans un tel cas, $\normkab > 1$ est indicatif d'une répulsion de l'espèce~$B$ par la présence de l'espèce~$A$, tandis que $\normkab < 1$ est indicatif d'une attraction de l'espèce~$B$ par la présence de l'espèce~$A$. En général, à mesure que $r$~augmente, $\kab$~tend vers~$\pi r^2$: en effet, une proportion de plus en plus grande de la zone d'étude est évaluée pour chaque individu de~$A$, et $\normkab$~tend vers~\num{1}.
 \section{Méthode}
-    Les occurrences du \textit{Global Biodiversity Information Facility} correspondant au règne \plantae\ ou à l'ordre \lepidoptera\ dans l'agglomération de Montréal \parencite{gadmGlobalAdministrativeAreas2022, gbif.orgGBIFOccurrenceDownload2025} ont été téléchargées, et les observations datant de ou d'après 2020 et ayant des coordonnées ont été retenues. Deux groupes d'espèces, $A$ (plantes) et $B$ (lépidoptères) ont été formés comme suit:
+    Les occurrences du \textit{Global Biodiversity Information Facility} correspondant au règne \plantae\ ou à l'ordre \lepidoptera\ dans l'agglomération de Montréal \parencite{gadmGlobalAdministrativeAreas2022, gbif.orgGBIFOccurrenceDownload2025} ont été téléchargées, et les observations datant de ou d'après 2020 et ayant des coordonnées ont été retenues. Deux groupes d'espèces, $\mathbf{A}$~(plantes) et $\mathbf{B}$~(lépidoptères) ont été formés comme suit:
     \begin{itemize}
-        \item $A$: \asclepiassyriaca, \asclepiasincarnata, \arctiumlappa, \solidagocanadensis;
-        \item $B$: \danausplexippus, \limenitisarchippus.
+        \item $\mathbf{A}$: \asclepiassyriaca, \asclepiasincarnata, \arctiumlappa, \solidagocanadensis;
+        \item $\mathbf{B}$: \danausplexippus, \limenitisarchippus.
     \end{itemize}
 
-    Les coordonnées des points, initialement en WGS84, ont été projetées dans le système NAD83(SCRS)/MTM fuseau 8, afin de minimiser la distorsion. Pour chacune des paires d'espèces $(A,B)$, l'indice de Ripley bivarié $\kab$ a été calculé pour une plage de valeurs $r$ d'environ \num{0}~à~\qty{8000}{\m}, en considérant l'étendue géographique des occurrences. Pour chacune des paires, un indice normalisé par rapport au modèle CSR, $\normkab$, a également été calculé, selon
-    \begin{equation*}
-        \normkab = \tfrac{\kab}{\pi r^2}.
-    \end{equation*}
+    Les coordonnées des points, initialement exprimées en WGS84 (EPSG:4326), ont été projetées en NAD83(SCRS)/MTM fuseau~8 (EPSG:2950) afin de minimiser la distorsion. Pour chacune des paires d'espèces $(A,B) \in \mathbf{A} \times \mathbf{B}$, l'indice de Ripley bivarié $\kab$ a été calculé pour une plage de valeurs de~$r$ d'environ \num{0}~à~\qty{8000}{\m}, en considérant l'étendue géographique des occurrences. Pour chacune des paires, un indice normalisé par rapport au modèle CSR, $\normkab$, a également été calculé, selon $\normkab = \kab/\pi r^2$.
 
-    CSR: Complètement spatialement aléatoire (\textit{Completely spatially random})\nocite{gbif.orgGBIFOccurrenceDownload2025}\nocite{GlobalAdministrativeAreas2022}
+    Un nuage de points des occurrences par espèce a été produit en ajoutant le contour de l'agglomération de Montréal afin d'obtenir une représentation visuelle de la répartition de \danausplexippus\ à l'intérieur de cette dernière (figure~\ref{fig:montreal_map}). De plus, pour chacune des paires~$(A,B)$, un graphique de~$\kab$ a été produit en tenant compte de toutes les valeurs de~$r$ (figure~\ref{fig:correlation}). Afin de mieux visualiser les corrélations pour des valeurs de~$r$ faibles (interactions à courte portée), un second graphique de~$\kab$ a été produit pour $r \le \SI{1}{\km}$ (figure~\ref{fig:correlation_close}).
+
+    De même, pour chacune des paires~$(A,B)$, un graphique de~$\normkab$ a été produit en tenant compte de toutes les valeurs de~$r$ supérieures à~\SI{50}{\m} (figure~\ref{fig:correlation_norm}). En effet, étant donné que $\normkab$~tend vers~$\infty$ à mesure que $r$~tend vers~\num{0}, écarter les points où $r < \SI{50}{\m}$ permet une meilleure résolution verticale du graphique. Afin de mieux visualiser les corrélations pour des valeurs de~$r$ faibles (interactions à courte portée), un graphique de~$\normkab$ a été produit pour $\SI{50}{\m} \le r \le \SI{1}{\km}$ (figure~\ref{fig:correlation_close_norm}). De même, dans le but de mieux visualiser les corrélations pour des valeurs de~$r$ élevées (interactions à longue portée), un graphique de~$\normkab$ a été produit pour $r \ge \SI{1}{\km}$ en écartant les valeurs de~$\normkab$ élevées associées à des valeurs de~$r$ faibles (figure~\ref{fig:correlation_far_norm}).
 
 \section{Résultats}
     \graphic{Occurrences de diverses espèces végétales et de lépidoptères sur l'île de Montréal depuis 2020}{montreal_map}
@@ -77,6 +90,9 @@
     \graphic{Corrélation normalisée entre les espèces pour $r \ge \SI{1}{\km}$}{correlation_far_norm}
 
 \section{Discussion}
+    TODO
+
+    Le lien écologique entre le papillon monarque et les asclépiades est bien documenté, mais les villes introduisent des facteurs supplémentaires à considérer. Ces deux espèces ne sont pas également réparties sur un territoire précis. L'analyse s'intéresse aux monarques sur l'île de Montréal, où l'on trouve de nombreux obstacles tels que la fragmentation du paysage, la densité des infrastructures et la variabilité des microclimats, qui influencent directement la distribution des espèces.
 
 \section{Conclusion}
 
