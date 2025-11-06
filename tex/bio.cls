@@ -12,6 +12,7 @@
 \setlength{\bigskipamount}{2\bigskipamount}
 
 \sloppy % whatever
+\raggedbottom
 
 \RequirePackage{titlesec}
 
