@@ -1,6 +1,6 @@
 % TODO: update dependencies based on bio.cls
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{bio_presentation}[Brebeuf bio presentation]
+\ProvidesClass{bio_presentation, 9pt}[Brebeuf bio presentation]
 
 \LoadClass[aspectratio=169]{beamer}
 \input{beamer_notes_patch}
@@ -12,19 +12,21 @@
 % Allows having Aboxed, the aligned version of boxed.
 \RequirePackage{mathtools}
 
+\RequirePackage{fontspec}
+\setsansfont{Fira Sans}[
+    SmallCapsFeatures={Letters=SmallCaps}
+]
+
 \RequirePackage{amsfonts}
 \RequirePackage{amssymb}
 \RequirePackage{float}
 
 \RequirePackage{tikz}
 
-\RequirePackage[labelsep=colon]{caption}
-
 \RequirePackage[output-decimal-marker={,}, per-mode=reciprocal, forbid-literal-units]{siunitx}
 
 \RequirePackage[style=apa, urldate=iso, date=iso, seconds=true, language=french]{biblatex}
 
-\renewcommand*{\multicitedelim}{,} % no space in [1,2,3]
 \setlength{\bibitemsep}{\parskip} % spacing between entries
 \setlength{\bibparsep}{0pt} % spacing between paragraphs in a single entry
 \DeclareFieldFormat{eprint:hdl}{%
@@ -49,24 +51,36 @@
        {\addspace\mkbibbrackets{\thefield{eprintclass}}}}}
 
 \makeatother
-\DefineBibliographyStrings{french}{
-    references = {Médiagraphie},
-}
+\defbibheading{custom}{}
 
-\DeclareCiteCommand{\citetitleplain}
-  {\usebibmacro{prenote}}
-  {\iffieldundef{shorttitle}{\thefield{title}}{\thefield{shorttitle}}}
-  {\multicitedelim}
-  {\usebibmacro{postnote}}
-\DeclareCiteCommand{\citetitleplain}
-  {\usebibmacro{prenote}}
-  {\thefield{title}}
-  {\multicitedelim}
-  {\usebibmacro{postnote}}
+\AtEveryBibitem{
+  \clearfield{labelday}
+} \makeatletter
+\let\beamer@writeslidentry@miniframeson=\beamer@writeslidentry
+\def\beamer@writeslidentry@miniframesoff{%
+  \expandafter\beamer@ifempty\expandafter{\beamer@framestartpage}{}% does not happen normally
+  {%else
+    % removed \addtocontents commands
+    \clearpage\beamer@notesactions%
+  }
+}
+\newcommand*{\miniframeson}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframeson}
+\newcommand*{\miniframesoff}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframesoff}
+\beamer@compresstrue
+
+\let\@oldprintbibliography\printbibliography
+\renewcommand{\printbibliography}{
+    \miniframesoff
+    \section{Médiagraphie}
+    \begin{frame}[allowframebreaks]
+        \frametitle{Médiagraphie}
+        \@oldprintbibliography[heading=custom]
+    \end{frame}
+    \miniframeson
+}
+\makeatother
 
 \RequirePackage{icomma} % no space after decimal comma
-
-\RequirePackage{enumitem}
 
 \usetikzlibrary{babel}
 
@@ -74,10 +88,12 @@
 \frenchbsetup{StandardLists=true, og=«, fg=»}
 
 % Beamer
+\beamertemplatenavigationsymbolsempty
 \usefonttheme[onlymath]{serif}
 \usetheme{Dresden}
 \usecolortheme{beaver}
 \setbeamertemplate{bibliography item}[text]
+\setbeamertemplate{frametitle continuation}{}
 \AtBeginDocument{
     \sisetup{
         mode=text,

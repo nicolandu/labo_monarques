@@ -36,12 +36,15 @@ b_species <- c(
   "Limenitis archippus"
 )
 
+reference_pair <- c("Asclepias syriaca", "Danaus plexippus")
+
 close_distance <- 1000 # m
 norm_min_distance <- 50 # m
 
 brewer_palette <- "Dark2"
 
 theo_label <- r"[CSR ($\pi r^2$)]"
+theo_label_norm <- r"[CSR (1)]"
 
 # Faster to set to FALSE when testing (output to PDF)
 # Set to TRUE for generating the .tex files used in the report
@@ -63,22 +66,22 @@ end <- function() {
 
 french_lon_label <- function(x) {
   sapply(x, function(lon) {
-    lon_str <- gsub("\\.", ",", format(round(abs(lon), 1), nsmall = 1))
+    lon_str <- gsub(r"[\.]", ",", format(round(abs(lon), 1), nsmall = 1))
     if (lon < 0) {
-      paste0(lon_str, r"[\unit{\degree}~O]")
+      paste0(lon_str, r"[\unit{\degree}\,O]")
     } else {
-      paste0(lon_str, r"[\unit{\degree}~E]")
+      paste0(lon_str, r"[\unit{\degree}\,E]")
     }
   })
 }
 
 french_lat_label <- function(x) {
   sapply(x, function(lat) {
-    lat_str <- gsub(r"[\\.]", ",", format(round(abs(lat), 2), nsmall = 2))
+    lat_str <- gsub(r"[\.]", ",", format(round(abs(lat), 2), nsmall = 2))
     if (lat < 0) {
-      paste0(lat_str, r"[\unit{\degree}~S]")
+      paste0(lat_str, r"[\unit{\degree}\,S]")
     } else {
-      paste0(lat_str, r"[\unit{\degree}~N]")
+      paste0(lat_str, r"[\unit{\degree}\,N]")
     }
   })
 }
@@ -230,18 +233,51 @@ r_prev <- max(k_df_norm$r[k_df_norm$r < close_distance], na.rm = TRUE)
 k_df_far_norm <- k_df_norm |>
   filter(r >= r_prev)
 
+csr_norm <- data.frame(
+  r = range(k_df_norm$r),
+  theo = 1,
+  label = theo_label_norm
+)
+csr_close_norm <- data.frame(
+  r = range(k_df_close_norm$r),
+  theo = 1,
+  label = theo_label_norm
+)
+csr_far_norm <- data.frame(
+  r = range(k_df_far_norm$r),
+  theo = 1,
+  label = theo_label_norm
+)
+
+
+# Get the reference series (iso values for A. syriaca x D. plexippus)
+ref_series <- k_df |>
+  filter(a == reference_pair[1] & b == reference_pair[2]) |>
+  select(r, iso) |>
+  rename(ref_iso = iso)
+# Join and normalize all series by the reference
+k_df_ref_norm <- k_df |>
+  left_join(ref_series, by = "r") |>
+  mutate(ref_norm = iso / ref_iso) |>
+  select(-ref_iso)
+
+
 # Get unique labels from k_df (same labels as in k_df_close)
 all_labels <- unique(k_df$label)
 
-
-colors_norm <- setNames(
+colors_base <- setNames(
   scales::brewer_pal(palette = brewer_palette)(length(all_labels)),
   all_labels
 )
 
 colors <- c(
   setNames("black", theo_label),
-  colors_norm
+  colors_base
+)
+
+colors_norm <- c(
+  setNames("black", theo_label_norm),
+  colors_base
 )
 
 init("montreal_map")
@@ -304,6 +340,11 @@ end()
 
 init("correlation_norm")
 ggplot(k_df_norm, aes(x = r / 1000, y = norm, color = label)) +
+  geom_line(
+    data = csr_norm,
+    aes(x = r / 1000, y = theo, color = label),
+    linetype = "dashed"
+  ) +
   geom_line() +
   scale_color_manual(values = colors_norm) +
   labs(
@@ -317,6 +358,11 @@ end()
 
 init("correlation_close_norm")
 ggplot(k_df_close_norm, aes(x = r, y = norm, color = label)) +
+  geom_line(
+    data = csr_close_norm,
+    aes(x = r, y = theo, color = label),
+    linetype = "dashed"
+  ) +
   geom_line() +
   scale_color_manual(values = colors_norm) +
   labs(
@@ -330,11 +376,29 @@ end()
 
 init("correlation_far_norm")
 ggplot(k_df_far_norm, aes(x = r / 1000, y = norm, color = label)) +
+  geom_line(
+    data = csr_far_norm,
+    aes(x = r / 1000, y = theo, color = label),
+    linetype = "dashed"
+  ) +
   geom_line() +
   scale_color_manual(values = colors_norm) +
   labs(
     x = r"[Distance $r$ (\unit{\km})]",
     y = r"[$K_{AB}^*(r)$]",
+    color = r"[Espèces ($A \times B$)]"
+  ) +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 2, byrow = TRUE))
+end()
+
+init("correlation_ref_norm")
+ggplot(k_df_ref_norm, aes(x = r / 1000, y = ref_norm, color = label)) +
+  geom_line() +
+  scale_color_manual(values = colors_norm) +
+  labs(
+    x = r"[Distance $r$ (\unit{\km})]",
+    y = r"[$\frac{K_{AB}(r)}{K_{\text{ref}}(r)}$]",
     color = r"[Espèces ($A \times B$)]"
   ) +
   theme(legend.position = "bottom") +

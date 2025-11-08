@@ -9,13 +9,15 @@ from pathlib import Path
 SRC = Path("tex")
 FIGS_NAME = "figures"
 FIGS = Path(FIGS_NAME)
+PICS_NAME = "photos"
+PICS = Path(PICS_NAME)
 TMP = Path("tmp")
 OUT = Path("out")
 OUTNAME_MAGIC = r"%filename "
 OUTNAME_FMT = r"{}.pdf"
 
 my_env = os.environ.copy()
-my_env["TEXINPUTS"] = f"{FIGS.resolve()}{os.pathsep}{TMP.resolve()}{os.pathsep}"
+my_env["TEXINPUTS"] = f"{FIGS.resolve()}{os.pathsep}{PICS.resolve()}{os.pathsep}{TMP.resolve()}{os.pathsep}"
 
 
 def clean(silent=False):
